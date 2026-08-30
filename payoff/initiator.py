@@ -41,9 +41,9 @@ class Strategy:
         else:
             spot_prices = np.linspace(self.underlying.current_price * min_threshold, self.underlying.current_price * max_threshold, self.underlying.current_price)
             if self.underlying.position == LONG:
-                profit += self.underlying.predicted_price - self.underlying.current_price
+                profit += spot_prices - self.underlying.current_price
             elif self.underlying.position == SHORT:
-                profit += self.underlying.current_price - self.underlying.predicted_price
+                profit += self.underlying.current_price - spot_prices
 
         for option in self.options:
             if option.position == LONG:
