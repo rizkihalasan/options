@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
+import math
 from matplotlib.widgets import Slider, Button
 
 LONG = 'long'
@@ -31,15 +32,17 @@ class Strategy:
         self.options = options
         self.underlying = underlying
     
-    def calculate_profit(self):
+    def calculate_profit(self, left_x = None, right_x = None):
         min_threshold = 0.80
         max_threshold = 1.20
         profit = 0
-        if not self.underlying:
+        if left_x and right_x:
+            spot_prices = np.linspace(left_x, right_x, 100)
+        elif not self.underlying:
             spot_prices = np.linspace(80, 120, 100)
             
         else:
-            spot_prices = np.linspace(self.underlying.current_price * min_threshold, self.underlying.current_price * max_threshold, self.underlying.current_price)
+            spot_prices = np.linspace(math.floor(self.underlying.current_price * min_threshold), math.ceil(self.underlying.current_price * max_threshold), round(self.underlying.current_price))
             if self.underlying.position == LONG:
                 profit += spot_prices - self.underlying.current_price
             elif self.underlying.position == SHORT:
